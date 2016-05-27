@@ -1,0 +1,8 @@
+MinClusterCaloHits MinClusterLength ShouldPerformSlicing
+5 5.f false
+5 5.f true
+5 6.f true
+5 7.f true
+4 5.f true
+3 5.f true
+2 5.f true
