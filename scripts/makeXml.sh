@@ -13,17 +13,17 @@ root_dir=$5
 rm -f xmls/*.xml
 
 counter=0
-max=1000
+#max=1000
 for i in `ls ${source_dir} | sort -V`
 do
     counter=$[$counter+1]
-    if [ $counter -gt $max ];
-    then
-        break
-    fi
+    #if [ $counter -gt $max ];
+    #then
+    #    break
+    #fi
 
     # Get the file identifier and use this for the output root files.
-    fileIdentifier=$[`echo $i | grep -oP '(?<=_)\d+(?=_reco1\.)'`]
+    fileIdentifier=$counter # $[`echo $i | grep -oP '(?<=_)\d+(?=_reco1\.)'`]
     outputFile=$(pwd)/${root_dir}/${root_label}_$fileIdentifier.root;
 
     # Use sed to replace the INPUT_FILE_NAME and OUTPUT_FILE_NAME in the XML file with the right paths.

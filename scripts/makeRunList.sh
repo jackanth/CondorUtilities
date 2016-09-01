@@ -14,11 +14,13 @@ nFilesPerJob=$6
 rm -f "runlist_$instance_suffix.txt"
 
 counter=0
+fullCounter=0
 firstTime=true
 
 for i in `ls ${source_dir} | sort -V`
 do
-    fileIdentifier=$[`echo $i | grep -oP '(?<=_)\d+(?=_reco1\.)'`]
+    fileIdentifier=$fullCounter # [`echo $i | grep -oP '(?<=_)\d+(?=_reco1\.)'`]
+    fullCounter=$(expr $fullCounter + 1)
 
     # We only want to write the pandora binary location and number of events per file at the start of each job row.
     if { [ $counter -eq 0 ] && [ $firstTime == true ]; } || { [ $counter -eq 1 ] && [ $firstTime == false ]; };
