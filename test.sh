@@ -3,14 +3,14 @@
 # Usage: `source test.sh`
 
 # Set the configurable parameters.
-pandoraLocation="/usera/weston/bin/pandora"
+pandoraLocation="/usera/anthony/bin/pandora"
 eventsPerFile=100
 configFile="batch_config.txt"
 inputFileString="/r05/dune/mcproduction_v05_04_00/prodgenie_bnb_nu_uboone_100k/*_reco1.pndr"
 settingsFileLabel="PandoraSettings_master"
 nFilesPerJob=10
 validate=true
-validationDir="/usera/weston/LAr/pandora/LArReco/validation"
+validationDir="/usera/anthony/LAr/pandora/LArReco/validation"
 validationFileName="Validation.C"
 validationArgs="false, false, 0, 100000, 5, 15, true, false, true"
 
