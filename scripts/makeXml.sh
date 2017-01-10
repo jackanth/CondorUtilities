@@ -16,7 +16,6 @@ counter=0
 #max=1000
 for i in `ls ${source_dir} | sort -V`
 do
-    counter=$[$counter+1]
     #if [ $counter -gt $max ];
     #then
     #    break
@@ -29,6 +28,7 @@ do
     # Use sed to replace the INPUT_FILE_NAME and OUTPUT_FILE_NAME in the XML file with the right paths.
     sed -e s,INPUT_FILE_NAME,$i, -e s,OUTPUT_FILE_NAME,$outputFile, -e s,FILE_IDENTIFIER,$fileIdentifier, ${xml_label} > $(pwd)/${xml_dir}/PandoraSettings_${fileIdentifier}.xml
 
+    counter=$[$counter+1]
     echo -ne " > Writing: ${xml_dir}/PandoraSettings_${fileIdentifier}.xml"\\r
 done
 echo -ne \\n

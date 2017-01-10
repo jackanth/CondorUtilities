@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Example usage: `source scripts/runCondorBatchInstance.sh "0" "/usera/weston/bin/pandora" "100" "/r05/dune/mcproduction_v05_04_00/prodgenie_bnb_nu_uboone_100k/*reco1.pndr" "xmls" "root" "roots" 10 "/usera/weston/LAr/pandora/LArReco/validation" "Validation.C" "false, false, 0, 100000, 5, 15, true, false, true"`
+# Example usage: `source scripts/runCondorBatchInstance.sh "0" "~anthony/bin/pandora" "100" "/r05/dune/mcproduction_v05_04_00/prodgenie_bnb_nu_uboone_100k/*reco1.pndr" "xmls" "root" "roots" 10 "~anthony/LAr/pandora/LArReco/validation" "Validation.C" "false, false, 0, 100000, 5, 15, true, false, true"`
 
 # Grab the input parameters.
 instance_suffix=$1
@@ -16,6 +16,7 @@ validation_directory=${10}
 validation_filename=${11}
 validation_args=${12}
 totalBatches=${13}
+setupScriptLocation=${14}
 
 # Delete any existing ROOT and XML files.
 rm -f roots/*
@@ -25,7 +26,7 @@ echo -e "[batch $instance_suffix/$totalBatches] \e[1;35mWriting xml files\e[0m"
 source scripts/makeXml.sh "${source_dir}" "xml_bases/$instance_suffix.xml" "${xml_dir}" "${root_label}" "${root_dir}"
 
 echo -e "[batch $instance_suffix/$totalBatches] \e[1;35mWriting run list\e[0m"
-source scripts/makeRunList.sh "$pandoraLocation" "$eventsPerFile" "${instance_suffix}" "${source_dir}" "xml_bases/${instance_suffix}.xml" "${nFilesPerJob}"
+source scripts/makeRunList.sh "$pandoraLocation" "$eventsPerFile" "${instance_suffix}" "${source_dir}" "xml_bases/${instance_suffix}.xml" "${nFilesPerJob}" "$setupScriptLocation"
 
 echo -e "[batch $instance_suffix/$totalBatches] \e[1;35mSubmitting condor jobs\e[0m"
 python scripts/pandora_runCondor.py -r "runlist_$instance_suffix.txt"
@@ -55,8 +56,9 @@ if $validate ; then
     echo -e " > This may take a while..."
     rm -f results/$instance_suffix.txt
     cwd=$(pwd)
-    cd $validation_directory
-    echo  -e "gROOT->ProcessLine(\".L $validation_filename+\"); Validation(\"$cwd/catroots/$instance_suffix.root\", $validation_args); gSystem->Exit(0);" | root -b -l > $cwd/results/$instance_suffix.txt
+    eval "cd $validation_directory" # in case validation directory contains a ~
+    echo  -e "gROOT->ProcessLine(\".L $validation_filename+\"); Validation(\"$cwd/catroots/$instance_suffix.root\"); gSystem->Exit(0);" | root -b -l > $cwd/results/$instance_suffix.txt
+    # echo  -e "gROOT->ProcessLine(\".L $validation_filename+\"); Validation(\"$cwd/catroots/$instance_suffix.root\", $validation_args); gSystem->Exit(0);" | root -b -l > $cwd/results/$instance_suffix.txt
     cd $cwd
 fi
 

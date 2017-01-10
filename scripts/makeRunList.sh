@@ -1,14 +1,15 @@
 #!/bin/bash
 
-# Example usage: `source makeRunList.sh "/usera/weston/bin/pandora" "100" "0" "/r05/dune/mcproduction_v05_04_00/prodgenie_bnb_nu_uboone_100k/*reco1.pndr" "PandoraSettings_master" "/usera/weston/LAr/condor/xmls" 10`
+# Example usage: `source makeRunList.sh "~anthony/bin/pandora" "100" "0" "/r05/dune/mcproduction_v05_04_00/prodgenie_bnb_nu_uboone_100k/*reco1.pndr" "PandoraSettings_master" "~anthony/LAr/condor/xmls" 10 "~anthony/LAr/pandora/setup.sh`
 
-# Grab the input parameters
+# Grab the input parameters.
 pandoraLocation=$1
 eventsPerFile=$2
 instance_suffix=$3
 source_dir=$4
 xml_label=$5
 nFilesPerJob=$6
+setupScriptLocation=$7
 
 # Get rid of the runlist if it already exists.
 rm -f "runlist_$instance_suffix.txt"
@@ -25,7 +26,7 @@ do
     # We only want to write the pandora binary location and number of events per file at the start of each job row.
     if { [ $counter -eq 0 ] && [ $firstTime == true ]; } || { [ $counter -eq 1 ] && [ $firstTime == false ]; };
     then
-        echo -ne "$pandoraLocation $eventsPerFile " >> "runlist_$instance_suffix.txt"
+        echo -ne "$pandoraLocation $eventsPerFile $setupScriptLocation " >> "runlist_$instance_suffix.txt"
     fi
 
     # Make the input configuration files strings @-separated (but we want no @ at the end).

@@ -1,21 +1,21 @@
 #!/bin/bash
 
-# Example usage: `source scripts/runCondorBatch.sh "/usera/weston/bin/pandora" "100" "batch_config.txt" "/r05/dune/mcproduction_v05_04_00/prodgenie_bnb_nu_uboone_100k/*_reco1.pndr" "PandoraSettings_master" 10 true "/usera/weston/LAr/pandora/LArReco/validation" "Validation.C" "false, false, 0, 100000, 5, 15, true, false, true"`
+# Example usage: `source scripts/runCondorBatch.sh "100" "batch_config.txt" 10 true "~anthony/LAr/pandora/LArReco/validation" "Validation.C" "~anthony/LAr/pandora/setup.sh" "false, false, 0, 100000, 5, 15, true, false, true"`
 
 # Grab the input parameters.
-pandoraLocation=$1
-eventsPerFile=$2
-config_file=$3
-source_dir=$4
-xml_label=$5
+eventsPerFile=$1
+config_file=$2
 xml_dir="xmls"
 root_label="root"
 root_dir="roots"
-nFilesPerJob=$6
-validate=$7
-validation_directory=$8
-validation_filename=$9
-validation_args=${10}
+nFilesPerJob=$3
+validate=$4
+validation_directory=$5
+validation_filename=$6
+setupScriptLocation=$7
+validation_args=$8
+
+echo "SETUP: $setupScriptLocation"
 
 # Check that hadd and root are accessible.
 command -v hadd >/dev/null 2>&1 || { echo -e >&2 "\e[1;31mError: 'hadd' is required but is not currently accessible. Please setup uboonecode\e[0m"; return 1; }
@@ -51,7 +51,7 @@ rm -f xml_bases/*.bak
 firstTime=true
 batchCounter=0
 
-# For each row in the configuration file, expect the header row, make an XML base file.
+# For each row in the configuration file, except the header row, make an XML base file.
 while IFS='' read -r line || [[ -n "$line" ]]; do
     if $firstTime ; then
         firstTime=false;
@@ -59,22 +59,47 @@ while IFS='' read -r line || [[ -n "$line" ]]; do
     fi
 
     # Copy the master XML file into the base directory and use sed to make the replacements for each column.
-    cp "$xml_label.xml" xml_bases/$batchCounter.xml
+    settingsFileLocation=$(echo $line | awk "NR==1{print \$2}")
+    eval "cp $settingsFileLocation xml_bases/$batchCounter.xml" # settings file location could use a ~
 
-    for i in `seq 1 $numColumns`;
+    for i in `seq 4 $numColumns`; # column 1 is the pandora location, column 2 is the settings file to use, column 3 is the sample location, the rest are the replacements to make in the settings file
         do
             columnTitle=$(awk "NR==1{print \$$i}" $config_file)
+            
+            # Avoid wildcard expansion in sample location.
+            set -f
             columnEntry=$(echo $line | awk "NR==1{print \$$i}")
-            sed -i.bak s/"£%$columnTitle%£"/$columnEntry/g xml_bases/$batchCounter.xml
+            set +f
+
+            sed -i.bak s/"£$columnTitle£"/$columnEntry/g xml_bases/$batchCounter.xml
             
         done  
 
     batchCounter=$((batchCounter+1))
 
+largestBatchNumber=$((batchCounter-1))
+
 done < "$config_file"
 
 # Now run all the batch instances.
-for i in `seq 0 $((batchCounter-1))`;
-    do
-        source scripts/runCondorBatchInstance.sh $i "$pandoraLocation" "$eventsPerFile" "${source_dir}" "${xml_dir}" "${root_label}" "${root_dir}" "${nFilesPerJob}" "${validate}" "${validation_directory}" "${validation_filename}" "${validation_args}" "$((batchCounter-1))"
-    done  
+firstTimeHeader=true
+batchCounter=0
+
+while IFS='' read -r line || [[ -n "$line" ]]; do
+    if $firstTimeHeader ; then
+        firstTimeHeader=false;
+        continue;
+    fi
+
+    pandoraLocation=$(echo $line | awk "NR==1{print \$1}")
+
+    # Avoid wildcard expansion in sample location.
+    set -f
+    sampleLocation=$(echo $line | awk "NR==1{print \$3}")
+    set +f
+
+    source scripts/runCondorBatchInstance.sh $batchCounter "$pandoraLocation" "$eventsPerFile" "$sampleLocation" "${xml_dir}" "${root_label}" "${root_dir}" "${nFilesPerJob}" "${validate}" "${validation_directory}" "${validation_filename}" "${validation_args}" "$largestBatchNumber" "$setupScriptLocation"
+
+    batchCounter=$((batchCounter+1))
+    
+done < "$config_file" 
