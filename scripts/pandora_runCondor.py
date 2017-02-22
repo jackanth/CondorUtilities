@@ -28,7 +28,7 @@ def GetJobString():
 def GetJobArguments(scripts, firstLine):
     arguments = firstLine.split()
 
-    if 4 != len(arguments):
+    if 5 != len(arguments):
         print 'Invalid arguments found in runlist.'
         sys.exit(3)
 
