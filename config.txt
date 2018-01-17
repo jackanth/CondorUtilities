@@ -1,2 +1,2 @@
 PandoraLocation SettingsFileLocation SampleLocation EnableSplitting 
-~jjd49/lardirection_pandora/LArReco/bin ~jjd49/lardirection_pandora/CondorUtilities/PandoraSettings.xml /r05/uboone/jjd49/contained_ccqe_sample/*.pndr true
+~jjd49/lardirection_pandora/LArReco/bin/PandoraInterface ~jjd49/lardirection_pandora/CondorUtilities/PandoraSettings.xml /r05/uboone/jjd49/contained_ccqe_sample/*.pndr true

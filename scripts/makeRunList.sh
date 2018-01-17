@@ -24,7 +24,7 @@ do
     # We only want to write the pandora binary location and number of events per file at the start of each job row.
     if { [ $counter -eq 0 ] && [ $firstTime == true ]; } || { [ $counter -eq 1 ] && [ $firstTime == false ]; };
     then
-        echo -ne "$pandoraLocation $eventsPerFile $setupScriptLocation" >> "runlist_$instance_suffix.txt"
+        echo -ne "$pandoraLocation $eventsPerFile $setupScriptLocation " >> "runlist_$instance_suffix.txt"
     fi
 
     # Make the input configuration files strings @-separated (but we want no @ at the end).

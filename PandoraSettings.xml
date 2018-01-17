@@ -7,8 +7,8 @@
     <!-- ALGORITHM SETTINGS -->
     <algorithm type = "LArEventReading">
         <UseLArCaloHits>false</UseLArCaloHits>
-        <GeometryFileName>INPUT_FILE_NAME</GeometryFileName>
-        <EventFileNameList>/r05/uboone/jjd49/contained_ccqe_sample/Pandora_Events_containedCCQE_1872.pndr</EventFileNameList>
+        <GeometryFileName>/usera/jjd49/lardirection_pandora/LArReco/geometry/PandoraGeometry_MicroBooNE.xml</GeometryFileName>
+        <EventFileNameList>INPUT_FILE_NAME</EventFileNameList>
     </algorithm>
     <algorithm type = "LArPreProcessing">
         <OutputCaloHitListNameU>CaloHitListU</OutputCaloHitListNameU>
