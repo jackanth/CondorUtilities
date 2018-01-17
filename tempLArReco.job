@@ -1,0 +1,18 @@
+executable              = /var/clus/usera/jjd49/lardirection_pandora/CondorUtilities/scripts/pandora.sh                
+initial_dir             = /var/clus/usera/jjd49/lardirection_pandora/CondorUtilities                  
+notification            = never                                                 
+requirements            = (OSTYPE == "SLC6") && (LoadAvg < 0.5)               
+request_memory          = 1024                                                  
+rank                    = memory                                                
+output                  = /var/clus/usera/jjd49/lardirection_pandora/CondorUtilities/log/larreco.out 
+error                   = /var/clus/usera/jjd49/lardirection_pandora/CondorUtilities/log/larreco.err 
+log                     = /var/clus/usera/jjd49/lardirection_pandora/CondorUtilities/log/larreco.log 
+environment             = CONDOR_JOB=true                                       
+universe                = vanilla                                               
+getenv                  = false                                                 
+copy_to_spool           = true                                                  
+should_transfer_files   = yes                                                   
+when_to_transfer_output = on_exit_or_evict                                      
+arguments = ~jjd49/lardirection_pandora/LArReco/bin/PandoraInterface 100 ~jjd49/lardirection_pandora/setup.sh Full /usera/jjd49/lardirection_pandora/CondorUtilities/xmls/PandoraSettings_31.xml@/usera/jjd49/lardirection_pandora/CondorUtilities/xmls/PandoraSettings_32.xml@/usera/jjd49/lardirection_pandora/CondorUtilities/xmls/PandoraSettings_33.xml@/usera/jjd49/lardirection_pandora/CondorUtilities/xmls/PandoraSettings_34.xml@/usera/jjd49/lardirection_pandora/CondorUtilities/xmls/PandoraSettings_35.xml@/usera/jjd49/lardirection_pandora/CondorUtilities/xmls/PandoraSettings_36.xml@/usera/jjd49/lardirection_pandora/CondorUtilities/xmls/PandoraSettings_37.xml@/usera/jjd49/lardirection_pandora/CondorUtilities/xmls/PandoraSettings_38.xml@/usera/jjd49/lardirection_pandora/CondorUtilities/xmls/PandoraSettings_39.xml@/usera/jjd49/lardirection_pandora/CondorUtilities/xmls/PandoraSettings_40.xml
+
+queue 1 

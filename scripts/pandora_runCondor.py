@@ -65,40 +65,30 @@ def main():
         sys.exit(2)
 
     while True:
-        queueProcess = subprocess.Popen(['condor_q'], stdout=subprocess.PIPE)
-        queueOutput = queueProcess.communicate()[0]
-
-        regex = re.compile('pandora')
-        queueList = regex.findall(queueOutput)
-        nQueued = len(queueList)
-
         FNULL = open(os.devnull, 'w')
 
-        if nQueued >= maxRuns:
-            subprocess.call(["usleep", "500000"])
-        else:
-            with open(runlist, 'r') as file:
-                firstLine = file.readline()
-                fileContents = file.read().splitlines(True)
+        with open(runlist, 'r') as file:
+            firstLine = file.readline()
+            fileContents = file.read().splitlines(True)
 
-            nRemaining = len(fileContents)
+        nRemaining = len(fileContents)
 
-            with open(runlist, 'w') as file:
-                file.truncate()
-                file.writelines(fileContents)
+        with open(runlist, 'w') as file:
+            file.truncate()
+            file.writelines(fileContents)
 
-            with open('tempLArReco.job', 'w') as jobFile:
-                jobFile.truncate()
-                jobString  = GetJobString()
-                jobString += GetJobArguments(scripts, firstLine)
-                jobString += 'queue 1 \n'
-                jobFile.write(jobString)
+        with open('tempLArReco.job', 'w') as jobFile:
+            jobFile.truncate()
+            jobString  = GetJobString()
+            jobString += GetJobArguments(scripts, firstLine)
+            jobString += 'queue 1 \n'
+            jobFile.write(jobString)
 
-            subprocess.call(['condor_submit', 'tempLArReco.job'], stdout=FNULL, stderr=subprocess.STDOUT)
-            sys.stdout.write('\r\033[K > Jobs queued: ' + str(nQueued) + '. Jobs still to submit: ' + str(nRemaining))
-            sys.stdout.flush()
-            subprocess.call(["usleep", "500000"])
-            os.remove('tempLArReco.job')
+        subprocess.call(['condor_submit', 'tempLArReco.job'], stdout=FNULL, stderr=subprocess.STDOUT)
+        sys.stdout.write('\r\033[K > Jobs still to submit: ' + str(nRemaining))
+        sys.stdout.flush()
+        subprocess.call(["usleep", "500000"])
+        os.remove('tempLArReco.job')
 
         if 0 == nRemaining:
             print ''
