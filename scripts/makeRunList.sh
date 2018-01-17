@@ -8,6 +8,7 @@ source_dir=$4
 xml_label=$5
 nFilesPerJob=$6
 setupScriptLocation=$7
+recoOption=$8
 
 # Get rid of the runlist if it already exists.
 rm -f "runlist_$instance_suffix.txt"
@@ -24,7 +25,7 @@ do
     # We only want to write the pandora binary location and number of events per file at the start of each job row.
     if { [ $counter -eq 0 ] && [ $firstTime == true ]; } || { [ $counter -eq 1 ] && [ $firstTime == false ]; };
     then
-        echo -ne "$pandoraLocation $eventsPerFile $setupScriptLocation " >> "runlist_$instance_suffix.txt"
+        echo -ne "$pandoraLocation $eventsPerFile $setupScriptLocation $recoOption " >> "runlist_$instance_suffix.txt"
     fi
 
     # Make the input configuration files strings @-separated (but we want no @ at the end).

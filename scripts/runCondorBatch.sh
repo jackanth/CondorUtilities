@@ -12,6 +12,7 @@ validation_directory=$5
 validation_filename=$6
 setupScriptLocation=$7
 validation_args=$8
+recoOption=$9
 
 echo "SETUP: $setupScriptLocation"
 
@@ -96,7 +97,7 @@ while IFS='' read -r line || [[ -n "$line" ]]; do
     sampleLocation=$(echo $line | awk "NR==1{print \$3}")
     set +f
 
-    source scripts/runCondorBatchInstance.sh $batchCounter "$pandoraLocation" "$eventsPerFile" "$sampleLocation" "${xml_dir}" "${root_label}" "${root_dir}" "${nFilesPerJob}" "${validate}" "${validation_directory}" "${validation_filename}" "${validation_args}" "$largestBatchNumber" "$setupScriptLocation" 
+    source scripts/runCondorBatchInstance.sh $batchCounter "$pandoraLocation" "$eventsPerFile" "$sampleLocation" "${xml_dir}" "${root_label}" "${root_dir}" "${nFilesPerJob}" "${validate}" "${validation_directory}" "${validation_filename}" "${validation_args}" "$largestBatchNumber" "$setupScriptLocation" "$recoOption" 
 
     batchCounter=$((batchCounter+1))
     

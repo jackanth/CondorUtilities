@@ -13,5 +13,7 @@ validationDir="~jjd49/lardirection_pandora/LArReco/validation/"
 validationFileName="Validation.C"
 validationArgs="/* no args */"
 
+recoOption="Full"
+
 # Run the batch script.
-source scripts/runCondorBatch.sh "$eventsPerFile" "$configFile" "$nFilesPerJob" "$validate" "$validationDir" "$validationFileName" "$setupScriptLocation" "$validationArgs" 
+source scripts/runCondorBatch.sh "$eventsPerFile" "$configFile" "$nFilesPerJob" "$validate" "$validationDir" "$validationFileName" "$setupScriptLocation" "$validationArgs" "$recoOption"

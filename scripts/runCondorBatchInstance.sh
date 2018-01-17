@@ -15,6 +15,7 @@ validation_filename=${11}
 validation_args=${12}
 totalBatches=${13}
 setupScriptLocation=${14}
+recoOption=${15}
 
 # Delete any existing ROOT and XML files.
 rm -f roots/*
@@ -24,7 +25,7 @@ echo -e "[batch $instance_suffix/$totalBatches] \e[1;35mWriting xml files\e[0m"
 source scripts/makeXml.sh "${source_dir}" "xml_bases/$instance_suffix.xml" "${xml_dir}" "${root_label}" "${root_dir}"
 
 echo -e "[batch $instance_suffix/$totalBatches] \e[1;35mWriting run list\e[0m"
-source scripts/makeRunList.sh "$pandoraLocation" "$eventsPerFile" "${instance_suffix}" "${source_dir}" "xml_bases/${instance_suffix}.xml" "${nFilesPerJob}" "$setupScriptLocation" 
+source scripts/makeRunList.sh "$pandoraLocation" "$eventsPerFile" "${instance_suffix}" "${source_dir}" "xml_bases/${instance_suffix}.xml" "${nFilesPerJob}" "$setupScriptLocation" "$recoOption" 
 
 echo -e "[batch $instance_suffix/$totalBatches] \e[1;35mSubmitting condor jobs\e[0m"
 python scripts/pandora_runCondor.py -r "runlist_$instance_suffix.txt"
