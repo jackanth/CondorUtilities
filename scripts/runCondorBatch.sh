@@ -12,7 +12,6 @@ validation_directory=$5
 validation_filename=$6
 setupScriptLocation=$7
 validation_args=$8
-recoOption=$9
 
 echo "SETUP: $setupScriptLocation"
 
@@ -61,7 +60,7 @@ while IFS='' read -r line || [[ -n "$line" ]]; do
     settingsFileLocation=$(echo $line | awk "NR==1{print \$2}")
     eval "cp $settingsFileLocation xml_bases/$batchCounter.xml" # settings file location could use a ~
 
-    for i in `seq 4 $numColumns`; # column 1 is the pandora location, column 2 is the settings file to use, column 3 is the sample location, the rest are the replacements to make in the settings file
+    for i in `seq 5 $numColumns`; # column 1 is the pandora location, column 2 is the settings file to use, column 3 is the reconstruction option, 4 is the sample location, the rest are the replacements to make in the settings file
         do
             columnTitle=$(awk "NR==1{print \$$i}" $config_file)
             
@@ -91,10 +90,11 @@ while IFS='' read -r line || [[ -n "$line" ]]; do
     fi
 
     pandoraLocation=$(echo $line | awk "NR==1{print \$1}")
+    recoOption=$(echo $line | awk "NR==1{print \$3}")
 
     # Avoid wildcard expansion in sample location.
     set -f
-    sampleLocation=$(echo $line | awk "NR==1{print \$3}")
+    sampleLocation=$(echo $line | awk "NR==1{print \$4}")
     set +f
 
     source scripts/runCondorBatchInstance.sh $batchCounter "$pandoraLocation" "$eventsPerFile" "$sampleLocation" "${xml_dir}" "${root_label}" "${root_dir}" "${nFilesPerJob}" "${validate}" "${validation_directory}" "${validation_filename}" "${validation_args}" "$largestBatchNumber" "$setupScriptLocation" "$recoOption" 
