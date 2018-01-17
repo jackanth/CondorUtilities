@@ -1,7 +1,5 @@
 #!/bin/bash
 
-# Example usage: `source scripts/runCondorBatchInstance.sh "0" "~anthony/bin/pandora" "100" "/r05/dune/mcproduction_v05_04_00/prodgenie_bnb_nu_uboone_100k/*reco1.pndr" "xmls" "root" "roots" 10 "~anthony/LAr/pandora/LArReco/validation" "Validation.C" "false, false, 0, 100000, 5, 15, true, false, true"`
-
 # Grab the input parameters.
 instance_suffix=$1
 pandoraLocation=$2
@@ -17,7 +15,6 @@ validation_filename=${11}
 validation_args=${12}
 totalBatches=${13}
 setupScriptLocation=${14}
-geometryFile=${15}
 
 # Delete any existing ROOT and XML files.
 rm -f roots/*
@@ -27,7 +24,7 @@ echo -e "[batch $instance_suffix/$totalBatches] \e[1;35mWriting xml files\e[0m"
 source scripts/makeXml.sh "${source_dir}" "xml_bases/$instance_suffix.xml" "${xml_dir}" "${root_label}" "${root_dir}"
 
 echo -e "[batch $instance_suffix/$totalBatches] \e[1;35mWriting run list\e[0m"
-source scripts/makeRunList.sh "$pandoraLocation" "$eventsPerFile" "${instance_suffix}" "${source_dir}" "xml_bases/${instance_suffix}.xml" "${nFilesPerJob}" "$setupScriptLocation" "$geometryFile"
+source scripts/makeRunList.sh "$pandoraLocation" "$eventsPerFile" "${instance_suffix}" "${source_dir}" "xml_bases/${instance_suffix}.xml" "${nFilesPerJob}" "$setupScriptLocation" 
 
 echo -e "[batch $instance_suffix/$totalBatches] \e[1;35mSubmitting condor jobs\e[0m"
 python scripts/pandora_runCondor.py -r "runlist_$instance_suffix.txt"

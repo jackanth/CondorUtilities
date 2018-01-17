@@ -1,3 +1,2 @@
-PandoraLocation SettingsFileLocation SampleLocation ShouldPerformSlicing
-~anthony/bin/pandora-clean ~anthony/LAr/condor/PandoraSettings.xml /r05/dune/mcprod_sim_04_36_00_03_reco_05_08_00_05/bnb_1004/Pandora_Events_1004_*.pndr true
-~anthony/bin/pandora-clean ~anthony/LAr/condor/PandoraSettings.xml /r05/dune/mcprod_sim_04_36_00_03_reco_05_08_00_05/bnb_1004/Pandora_Events_1004_*.pndr false
+PandoraLocation SettingsFileLocation SampleLocation EnableSplitting 
+~jjd49/lardirection_pandora/LArReco/bin ~jjd49/lardirection_pandora/CondorUtilities/PandoraSettings.xml /r05/uboone/jjd49/contained_ccqe_sample/*.pndr true
